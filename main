@@ -1,0 +1,77 @@
+# Python3 program for Hangman
+
+# First, import the libraries we need to run the program.
+# We need the random library to choose a random word,
+# string to enable an uppercase alphabet
+# and words - a self-made collection of hangman words.
+
+import random
+from words import words
+import string
+
+# Definitions
+word = random.choice(words) # selects a random choice from words library
+word = word.upper()     # puts the chosen word in all upper case
+word_letters = set(word)   # returns the letters in the word
+alphabet = set(string.ascii_uppercase)      # turns user's character input to uppercase
+used_letters = set()    #  a place to store the letters guessed so far
+lives = 6
+
+# Introduce the user to the game
+print('\n--------------------------------------------------------\n\n'
+      '            WELCOME\n'
+      '            -------\n'
+      '   to this little game of hangman '
+      '    \nI\'ve made for you.\n'
+      '      It may not be much, \n'
+      '   but it\'s harder than you think.\n\n'
+      '(only because you\'re a little thick).\n\n'
+      'USER BEWARE: SPELLINGS ARE AMERICAN!\n\n')
+
+# And let's get to the good stuff! Below is a while loop,
+# Its purpose is to  check for user input and then compare that to the random word.
+# Then return an appropriate response.
+while len(word_letters) > 0 and lives > 0:
+    # letters used. It works
+    # ' '.join(['a', 'b', 'cd']) --> 'a b cd'
+
+
+
+    # Tell user what their guess looks like so far (ie H _ L L O)
+    word_list = [letter if letter in used_letters else '_' for letter in word]
+    print('Current word: ', ' '.join(word_list), '\n')
+
+    user_letter = input('\n  What\'s your guess?: ').upper()
+    if user_letter in alphabet - used_letters:
+        used_letters.add(user_letter)
+        if user_letter in word_letters:
+            word_letters.remove(user_letter)
+            print('')
+
+        else:
+            lives -= 1  # takes away a life if wrong
+            if lives == 5:
+                print('\nWHAT?! Of course that\'s not in the word. Well, you\'re down to 5 lives.'
+                      '\n_______________________________________________________________________\n')
+            else:
+                print('\nYour letter,', user_letter, 'is not in the word. That\'s another life down the drain.')
+    elif user_letter in used_letters:
+        print('You guessed that already. Idiot.'
+              '\n______________________________\n')
+    else:
+        print('Invalid character - just like you. Try again.'
+              '\n___________________________________________\n')
+
+    print('You have', lives, 'lives left and you have used these letters: ', ' '.join(used_letters))
+if lives == 0:
+    print('Really? Come on now, this was easy. The word was', word, '\n'
+          '____________________________________________________________\n')
+else:
+    word_list = [letter if letter in used_letters else '_' for letter in word]
+    print('Finally: ', ' '.join(word_list), '\n')
+    print('Well, you got it. Not that it was hard.\n'
+          '________________________________________\n')
+
+
+
+# python3 hangman.py
